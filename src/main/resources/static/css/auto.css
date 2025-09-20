@@ -1,0 +1,8 @@
+h1 {
+    color: #007bff; /* Un azul claro, por ejemplo */
+}
+
+.imagenAuto {
+    width: 250px;
+    height: auto; /* Usar 'auto' para mantener la proporción de la imagen */
+}
