@@ -1,111 +1,77 @@
 package com.example.demo.model;
+import java.util.ArrayList;
+import java.util.List;
 
-import java.time.LocalDate;
-import java.time.Period;  // Importa la clase para calcular períodos de tiempo 
+import jakarta.persistence.*;
 
+@Entity
 public class Auto {
-    // Atributos
-    private String patente;
-    private String marca; //ford
-    private LocalDate fechaFabricacion;
-    private String provinciaOrigen;
-   // private boolean estado = true / false;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer autoId; // PK
 
-    // --- Constructores ---
+    @Column(nullable = false)
+    private String marca;
 
-    // Constructor por defecto
-    public Auto() {
-        // pantente = null
-        // marca = null
-        // fechaFabricacion = null
-        // valor = 0
-        // coleccionable = false
-    }
+    @Column(nullable = false)
+    private String modelo;
 
-    // Constructor parametrizado
-    public Auto(String patente, String marca, LocalDate fechaFabricacion, String provinciaOrigen) {
-        this.patente = patente;
+    @Column(nullable = false)
+    private Integer anio; // Usamos Integer para el año
+
+    @Column(nullable = false)
+    private Double precio;
+
+    @Column
+    private String color;
+
+     // Relación N:1 con Vendedor: Muchos Modelos son asignados a un Vendedor.
+    @ManyToOne
+    @JoinColumn(name = "vendedor_id") // FK
+    private Vendedor vendedor;
+    
+    // Relación 1:N con Compra: Un Modelo puede ser vendido (comprado) muchas veces.
+    @OneToMany(mappedBy = "auto", cascade = CascadeType.ALL)
+    private List<Compra> comprasRealizadas = new ArrayList<>(); // Corregido el nombre para claridad
+
+
+    // Atributo de Borrado Lógico
+    @Column(nullable = false)
+    private boolean estado = true;
+
+    // Constructores, Getters y Setters...
+
+    // Constructor Vacío
+    public Auto() {}
+
+    // Constructor con parámetros (sin relaciones)
+    public Auto(String marca, String modelo, Integer anio, Double precio, String color, Vendedor vendedor) {
         this.marca = marca;
-        this.fechaFabricacion = fechaFabricacion;
-        this.provinciaOrigen = provinciaOrigen;
+        this.modelo = modelo;
+        this.anio = anio;
+        this.precio = precio;
+        this.color = color;
+        this.vendedor = vendedor;
+        this.estado = true;
     }
-
-    // Constructor parcial
-    public Auto(String patente, String marca, LocalDate fechaFabricacion) {
-        this.patente = patente;
-        this.marca = marca;
-        this.fechaFabricacion = fechaFabricacion;
-        this.provinciaOrigen = "Jujuy";
-    }
-
-    // --- Métodos Accesores (Getters y Setters) --- Main 
-
-    public String getPatente() {
-        return patente;
-    }
-
-    public void setPatente(String patente) {
-        this.patente = patente;
-    }
-
-    public String getMarca() {
-        return marca; //retorna la marca
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca; //frot modifica la marca uso set ford PARA CREAR Y PARA MODIFICAR
-    }
-
-    public LocalDate getFechaFabricacion() {
-        return fechaFabricacion;
-    }
-
-    public void setFechaFabricacion(LocalDate fechaFabricacion) {
-        this.fechaFabricacion = fechaFabricacion;
-    }
-
-    public String getProvinciaOrigen() {
-        return provinciaOrigen;
-    }
-
-    public void setProvinciaOrigen(String provinciaOrigen) {
-        this.provinciaOrigen = provinciaOrigen;
-    }
-
-    // --- Métodos de Lógica de Negocio ---
-
-    /** integer 
-     * Calcula la antigüedad del auto en años.
-     */
-    public int calcularAntiguedad() {
-        return Period.between(this.fechaFabricacion, LocalDate.now()).getYears();//01/01/2000 AHORA NOW = 06-09-2025 AÑOS   RESTA 26 INT
-    }
-
-    /**
-     * Verifica si el auto es un clásico (más de 25 años de antigüedad).
-     * @return true si es clásico, false si no.
-     */
-    public boolean esAutoClasico() { //true o false//  VERDAD O FALSO
-        return calcularAntiguedad() > 25; //ES COMO IF ES UN METODO 
-        // SI ES MAYOR A 25 RETORNA TRUE SINO FALSE 😡
-        // 26 AÑOS SI ES UN AUTO CLASICO🟩 TRUe / Verdadero
-    }
-
-    /**
-     * Muestra todos los datos del auto, incluyendo su antigüedad y si es un clásico.
-     */
-    public void mostrarDatos() { // metodo que imprime todos los datos del auto
-        System.out.println("--- Datos del Auto ---");
-        System.out.println("Patente: " + this.patente);
-        System.out.println("Marca: " + this.marca);
-        System.out.println("Fecha de Fabricación: " + this.fechaFabricacion);
-        System.out.println("Provincia de Origen: " + this.provinciaOrigen);
-        System.out.println("Antigüedad: " + calcularAntiguedad() + " años"); //26 AÑOS
-
-        if (esAutoClasico()) { // 26 AÑOS true
-            System.out.println("Es un auto clásico."); // mayor de edad
-        } else {
-            System.out.println("No es un auto clásico.");// menor de edad
-        }
-    }
+    
+    // Getters y Setters
+    public Integer getAutoId() { return autoId; }
+    public void setAutoId(Integer autoId) { this.autoId = autoId; }
+    public String getMarca() { return marca; }
+    public void setMarca(String marca) { this.marca = marca; }
+    public String getModelo() { return modelo; }
+    public void setModelo(String modelo) { this.modelo = modelo; }
+    public Integer getAnio() { return anio; }
+    public void setAnio(Integer anio) { this.anio = anio; }
+    public Double getPrecio() { return precio; }
+    public void setPrecio(Double precio) { this.precio = precio; }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+    public Vendedor getVendedor() { return vendedor; }
+    public void setVendedor(Vendedor vendedor) { this.vendedor = vendedor; }
+    public List<Compra> getComprasRealizadas() { return comprasRealizadas; }
+    public void setComprasRealizadas(List<Compra> comprasRealizadas) { this.comprasRealizadas = comprasRealizadas; }
+    public boolean isEstado() { return estado; }
+    public void setEstado(boolean estado) { this.estado = estado; }
 }

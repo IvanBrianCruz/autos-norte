@@ -16,8 +16,8 @@ public class AutoController {
     public String auto(Model model) { // Añade 'Model model' como argumento
 
         Auto nuevoAuto = new Auto(); // Crear una nueva instancia dentro del método
-        nuevoAuto.setMarca("Toyota");
-        nuevoAuto.setPatente("ABC123");
+        //nuevoAuto.setMarca("Toyota");
+        //nuevoAuto.setPatente("ABC123");
 
         // Añadir el objeto 'nuevoAuto' al Model con el nombre "auto" o "nuevoAuto"
         // El nombre "auto" es más idiomático si solo hay un objeto de ese tipo.
