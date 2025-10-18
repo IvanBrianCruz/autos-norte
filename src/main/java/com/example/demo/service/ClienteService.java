@@ -17,50 +17,50 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    // Métodos CRUD (5 métodos requeridos)
+    // Métodos CRUD (5 métodos requeridos) 
 
     // 1. CREAR / GUARDAR (Create)
     /**
      * Guarda un nuevo cliente o actualiza uno existente.
-     * @param cliente El objeto Cliente a persistir.
-     * @return El objeto Cliente guardado/actualizado.
+     *  El objeto Cliente a persistir.
+     *  El objeto Cliente guardado/actualizado.
      */
     public Cliente guardarCliente(Cliente cliente) {
         // La lógica de negocio podría ir aquí (ej: validar email antes de guardar)
         return clienteRepository.save(cliente);
     }
     
-    // 2. LEER TODOS (Read All) - Filtrado por Borrado Lógico
+    // 2. "LEER TODOS' (Read All) - Filtrado por Borrado Lógico
     /**
      * Obtiene todos los clientes cuyo estado es TRUE (activos).
      * Usa el Query Method definido en el Repository.
-     * @return Lista de clientes activos.
+     *  Lista de clientes activos.
      */
-    public List<Cliente> obtenerClientesActivos() {
+    public List<Cliente> obtenerTodosClientesActivos() {
         return clienteRepository.findByEstadoTrue();
     }
     
     // 3. LEER POR ID (Read By ID)
     /**
      * Obtiene un cliente por su ID, independientemente de su estado (activo o inactivo).
-     * @param id El ID del cliente a buscar.
-     * @return Un objeto Optional que puede contener el Cliente.
+     *  El ID del cliente a buscar.
+     *  Un objeto Optional que puede contener el Cliente.
      */
-    public Optional<Cliente> obtenerClientePorId(Integer id) {
+    public Optional<Cliente> obtenerClientePorId(Integer clienteId) {
         // Usamos findById que devuelve un Optional para manejar la posible ausencia del cliente.
-        return clienteRepository.findById(id);
+        return clienteRepository.findById(clienteId);
     }
     
     // 4. ACTUALIZAR (Update)
     /**
      * Actualiza la información de un cliente existente.
-     * @param id El ID del cliente a actualizar.
-     * @param detallesCliente Los nuevos datos del cliente.
-     * @return El cliente actualizado o null si no se encontró.
+     * id El ID del cliente a actualizar.
+     * detallesCliente Los nuevos datos del cliente.
+     *  El cliente actualizado o null si no se encontró.
      */
-    public Cliente actualizarCliente(Integer id, Cliente detallesCliente) {
+    public Cliente actualizarCliente(Integer clienteId, Cliente detallesCliente) {
         // 1. Busca el cliente existente
-        return clienteRepository.findById(id).map(clienteExistente -> {
+        return clienteRepository.findById(clienteId).map(clienteExistente -> {
             // 2. Actualiza los campos (se asume que el ID ya está validado)
             clienteExistente.setNombre(detallesCliente.getNombre());
             clienteExistente.setApellido(detallesCliente.getApellido());
@@ -79,12 +79,11 @@ public class ClienteService {
     // 5. ELIMINAR (Delete) - Borrado Lógico
     /**
      * Realiza un borrado lógico, cambiando el atributo 'estado' a FALSE.
-     * @param id El ID del cliente a desactivar.
-     * @return true si la eliminación lógica fue exitosa, false si el cliente no fue encontrado.
+     *  El ID del cliente a desactivar.
+     *  true si la eliminación lógica fue exitosa, false si el cliente no fue encontrado.
      */
-    public boolean eliminarClienteLogico(Integer id) {
-        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
-
+    public boolean eliminarClienteLogico(Integer clienteId) {
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(clienteId);    
         if (clienteEncontrado.isPresent()) {
             Cliente cliente = clienteEncontrado.get();
             cliente.setEstado(false); // 🔑 Lógica clave: Borrado Lógico
