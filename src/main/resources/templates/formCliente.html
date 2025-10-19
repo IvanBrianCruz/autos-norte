@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Nuevo Cliente</title>
+</head>
+<body>
+    <h1>Registrar Nuevo Cliente</h1>
+
+    <!-- th:action: Define el endpoint POST del controlador: /guardarCliente -->
+    <!-- th:object: Indica a Thymeleaf que este formulario se mapeará al objeto 'cliente' del Model -->
+    <!-- method="post": Es esencial para enviar datos al método @PostMapping -->
+    <form th:action="@{/guardarCliente}" th:object="${cliente}" method="post">
+
+        <!-- Campo Oculto para ID. Necesario para diferenciarse de una actualización si el objeto se usa para ambas -->
+        <!-- Aunque aquí solo es para crear, es buena práctica mantenerlo. -->
+        <input type="hidden" th:field="*{clienteId}" />
+
+        <p>
+            <label for="nombre">Nombre:</label>
+            <!-- th:field="*{nombre}": Mapea este input al atributo 'nombre' del objeto Cliente -->
+            <input type="text" id="nombre" th:field="*{nombre}" required>
+        </p>
+        
+        <p>
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" th:field="*{apellido}" required>
+        </p>
+
+        <p>
+            <label for="email">Email:</label>
+            <input type="email" id="email" th:field="*{email}" required>
+        </p>
+
+        <p>
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" th:field="*{telefono}">
+        </p>
+
+        <p>
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" th:field="*{direccion}">
+        </p>
+
+        <p>
+            <!-- Botón de envío, que ejecuta la acción POST /guardarCliente -->
+            <button type="submit">Guardar Cliente</button>
+        </p>
+
+    </form>
+
+    <p><a th:href="@{/listarClientes}">Volver a la Lista</a></p>
+
+</body>
+</html>

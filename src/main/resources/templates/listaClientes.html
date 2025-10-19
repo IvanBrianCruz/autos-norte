@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Clientes Activos</title>
+</head>
+<body>
+   
+
+    <!-- Enlace para ir al formulario de creación -->
+    <p><a th:href="@{/nuevoCliente}">Registrar Nuevo Cliente</a></p>
+
+    <h2>Clientes Actuales:</h2>
+
+    <!-- th:if: Muestra este mensaje si la lista de clientes está vacía -->
+    <div th:if="${clientes.isEmpty()}">
+        <p>No hay clientes activos registrados.</p>
+    </div>
+
+    <!-- th:unless: Muestra la tabla si hay clientes -->
+    <table border="1" th:unless="${clientes.isEmpty()}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>direccion</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- th:each: Itera sobre la lista 'clientes' que viene del controlador -->
+            <tr th:each="cliente : ${clientes}">
+                <td th:text="${cliente.clienteId}"></td>
+                <td th:text="${cliente.nombre}"></td>
+                <td th:text="${cliente.apellido}"></td>
+                <td th:text="${cliente.email}"></td>
+                <td th:text="${cliente.estado}"></td>
+                <td th:text="${cliente.direccion}"></td>
+                <!-- Enlace de acción simple (si se necesitaran más acciones como detalle) 
+                <td>
+                    <a th:href="@{/detalleCliente/{id}(id=${cliente.clienteId})}">Ver Detalles</a>
+                </td>-->
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
