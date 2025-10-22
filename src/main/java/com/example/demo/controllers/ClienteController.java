@@ -33,12 +33,12 @@ public class ClienteController {
     public String listarClientesActivos(Model model) {
         // Obtenemos solo los clientes activos
         List<Cliente> clientes = clienteService.obtenerTodosClientesActivos();
-        
+
         // Agregamos la lista al objeto Model para que la vista pueda acceder a ella
         model.addAttribute("clientes", clientes);
-        
+
         // Retorna el nombre de la plantilla HTML a renderizar (ej: Thymeleaf o JSP)
-        return "listaClientes"; 
+        return "listaClientes";
     }
 
     // 2. Mostrar el formulario para registrar un nuevo cliente
@@ -56,42 +56,66 @@ public class ClienteController {
     public String guardarCliente(@ModelAttribute Cliente cliente) {
         // El servicio guarda el objeto enviado desde el formulario
         clienteService.guardarCliente(cliente);
-        
+
         // Redirige al usuario a la lista principal después de guardar
-        return "redirect:/listarClientes"; 
+        return "redirect:/listarClientes";
     }
 
- // 4. VER DETALLE DEL CLIENTE (READ By ID) - MÁS CONCISO
+
+
+
+
+
+
+
+    
+    // 4. VER DETALLE DEL CLIENTE (READ By ID) - MÁS CONCISO
     // GET /detalleCliente/{id}
     @GetMapping("/detalleCliente/{id}")
     public String verDetalleCliente(@PathVariable("id") Integer id, Model model) {
-        
+
         // Uso de orElseThrow():
         // 1. Llama al servicio, que devuelve un Optional<Cliente>.
-        // 2. Si el Optional está vacío, orElseThrow lanza la excepción ResponseStatusException.
-        // 3. Spring captura esta excepción y devuelve automáticamente un código de estado HTTP 404.
-        
+        // 2. Si el Optional está vacío, orElseThrow lanza la excepción
+        // ResponseStatusException.
+        // 3. Spring captura esta excepción y devuelve automáticamente un código de
+        // estado HTTP 404.
+
         Cliente cliente = clienteService.obtenerClientePorId(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con ID: " + id));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con ID: " + id));
         // Si el cliente fue encontrado, el código continúa aquí.
         model.addAttribute("cliente", cliente);
-        
+
         // Retorna el nombre de la plantilla HTML de detalle
-        return "detalleCliente"; 
+        return "detalleCliente";
     }
-   
 
     // 5. ELIMINAR CLIENTE (DELETE - Borrado Lógico)
     // GET /eliminarCliente/{id}
     @GetMapping("/eliminarCliente/{id}")
     public String eliminarClienteLogico(@PathVariable("id") Integer id) {
-      
+
         clienteService.eliminarClienteLogico(id);
-        
-    
+
         // Redirige al usuario a la lista principal después de la operación
-        return "redirect:/listarClientes"; 
+        return "redirect:/listarClientes";
     }
 
- 
+    // EDITAR CLIENTE (UPDATE) // GET /editarCliente/{id}
+
+  @GetMapping("/editarCliente/{id}")
+    public String mostrarFormularioEdicion(@PathVariable("id") Integer id, Model model) {
+        
+        // Usamos el mismo patrón de búsqueda y manejo de 404
+        Cliente cliente = clienteService.obtenerClientePorId(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado para editar con ID: " + id));
+        
+        // Agregamos el cliente existente al modelo
+        model.addAttribute("cliente", cliente);
+        
+        // Reutilizamos la misma vista del formulario de registro, pero ahora contendrá datos
+        return "formCliente"; 
+    }
+
 }
