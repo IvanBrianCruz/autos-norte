@@ -27,6 +27,7 @@
                 <th>Email</th>
                 <th>Estado</th>
                 <th>direccion</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -38,10 +39,13 @@
                 <td th:text="${cliente.email}"></td>
                 <td th:text="${cliente.estado}"></td>
                 <td th:text="${cliente.direccion}"></td>
-                <!-- Enlace de acción simple (si se necesitaran más acciones como detalle) 
+               
                 <td>
-                    <a th:href="@{/detalleCliente/{id}(id=${cliente.clienteId})}">Ver Detalles</a>
-                </td>-->
+                    <a th:href="@{/detalleCliente/{id}(id=${cliente.clienteId})}">Ver Detalles🔎</a>
+
+                   
+                    <a th:href="@{/eliminarCliente/{id}(id=${cliente.clienteId})}">ELIMINAR 🔴</a>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -50,6 +50,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <!-- ¡Spring Boot se encarga de la versión! -->
+    <scope>runtime</scope>
+</dependency>
 
 		 <dependency>
         <groupId>org.springframework.boot</groupId>

@@ -2,10 +2,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.Cliente;
 import com.example.demo.service.ClienteService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller; // CAMBIADO a @Controller
 import org.springframework.ui.Model; // IMPORTADO para pasar datos a la vista
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 //import java.util.Optional; // Necesario para la búsqueda por ID
@@ -56,6 +58,38 @@ public class ClienteController {
         clienteService.guardarCliente(cliente);
         
         // Redirige al usuario a la lista principal después de guardar
+        return "redirect:/listarClientes"; 
+    }
+
+ // 4. VER DETALLE DEL CLIENTE (READ By ID) - MÁS CONCISO
+    // GET /detalleCliente/{id}
+    @GetMapping("/detalleCliente/{id}")
+    public String verDetalleCliente(@PathVariable("id") Integer id, Model model) {
+        
+        // Uso de orElseThrow():
+        // 1. Llama al servicio, que devuelve un Optional<Cliente>.
+        // 2. Si el Optional está vacío, orElseThrow lanza la excepción ResponseStatusException.
+        // 3. Spring captura esta excepción y devuelve automáticamente un código de estado HTTP 404.
+        
+        Cliente cliente = clienteService.obtenerClientePorId(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado con ID: " + id));
+        // Si el cliente fue encontrado, el código continúa aquí.
+        model.addAttribute("cliente", cliente);
+        
+        // Retorna el nombre de la plantilla HTML de detalle
+        return "detalleCliente"; 
+    }
+   
+
+    // 5. ELIMINAR CLIENTE (DELETE - Borrado Lógico)
+    // GET /eliminarCliente/{id}
+    @GetMapping("/eliminarCliente/{id}")
+    public String eliminarClienteLogico(@PathVariable("id") Integer id) {
+      
+        clienteService.eliminarClienteLogico(id);
+        
+    
+        // Redirige al usuario a la lista principal después de la operación
         return "redirect:/listarClientes"; 
     }
 
