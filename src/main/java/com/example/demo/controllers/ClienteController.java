@@ -61,14 +61,6 @@ public class ClienteController {
         return "redirect:/listarClientes";
     }
 
-
-
-
-
-
-
-
-    
     // 4. VER DETALLE DEL CLIENTE (READ By ID) - MÁS CONCISO
     // GET /detalleCliente/{id}
     @GetMapping("/detalleCliente/{id}")
@@ -104,18 +96,81 @@ public class ClienteController {
 
     // EDITAR CLIENTE (UPDATE) // GET /editarCliente/{id}
 
-  @GetMapping("/editarCliente/{id}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // 6. MOSTRAR FORMULARIO PARA EDITAR (UPDATE - GET)
+    // GET /editarCliente/{id}
+    @GetMapping("/editarCliente/{id}")
     public String mostrarFormularioEdicion(@PathVariable("id") Integer id, Model model) {
-        
-        // Usamos el mismo patrón de búsqueda y manejo de 404
-        Cliente cliente = clienteService.obtenerClientePorId(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado para editar con ID: " + id));
-        
-        // Agregamos el cliente existente al modelo
+        // 1. Obtener el cliente por ID, lanzando 404 si no existe
+    Cliente cliente = clienteService.obtenerClientePorId(id)
+            .orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado para editar con ID: " + id));
+    
+    // 2. Agregar el cliente encontrado al modelo
+    model.addAttribute("cliente", cliente);
+        // 2. Agregar el cliente encontrado al modelo
         model.addAttribute("cliente", cliente);
+
+        // 3. Reutilizar la vista del formulario (que ya está preparada para edición)
+        return "formCliente";
+    }
+
+    // 7. PROCESAR ACTUALIZACIÓN (UPDATE - POST)
+    // POST /actualizarCliente/{id}
+    @PostMapping("/actualizarCliente/{id}")
+    public String actualizarCliente(@PathVariable("id") Integer id, @ModelAttribute Cliente clienteActualizado) {
+        // 1. Establecer el ID en el objeto recibido del formulario
+        // Esto es vital ya que el ModelAttribute lo crea, pero necesitamos el ID para
+        // el Service.
+        clienteActualizado.setClienteId(id);
+
+        // 2. Llamar al servicio de actualización
+        Cliente clienteResultado = clienteService.actualizarCliente(id, clienteActualizado);
+
+        // 3. Manejo de error (si no se encontró el cliente original en el servicio)
         
-        // Reutilizamos la misma vista del formulario de registro, pero ahora contendrá datos
-        return "formCliente"; 
+
+        // 4. Redirigir a la lista de clientes o a la vista de detalle
+        return "redirect:/listarClientes"; // O "redirect:/detalleCliente/" + id;
     }
 
 }

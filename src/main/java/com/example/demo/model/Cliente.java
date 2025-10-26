@@ -10,13 +10,13 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clienteId; // PK
 
-    @Column(nullable = false)
+    @Column
     private String nombre;
 
-    @Column(nullable = false)
+    @Column
     private String apellido;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String email;
 
     @Column
