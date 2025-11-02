@@ -10,6 +10,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clienteId; // PK
 
+    
     @Column
     private String nombre;
 
